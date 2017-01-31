@@ -6,6 +6,8 @@ public class Simulator extends AbstractModel {
 
 	private static final String AD_HOC = "1";
 	private static final String PASS = "2";
+	private static final String SUBC = "3"; // Subcriber toegevoegd
+
     private Thread thread = null;
 	private Parkeergarage parkeergarage;
 	private CarQueue entranceCarQueue;
@@ -93,8 +95,20 @@ public class Simulator extends AbstractModel {
                 }
             });
             thread.start();
-        }
+        }  else if (Thread.currentThread().isAlive()){
+        thread =new Thread (new Runnable() {
+
+            @Override
+            public void run() {
+                for (int i = 0; i <= 100; i++) {
+                    tick();
+                }
+            }
+        });
+        thread.start();
     }
+}
+
 
     public void tick() {
     	advanceTime();
@@ -144,7 +158,9 @@ public class Simulator extends AbstractModel {
     	int numberOfCars=getNumberOfCars(weekDayArrivals, weekendArrivals);
         addArrivingCars(numberOfCars, AD_HOC);    	
     	numberOfCars=getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
-        addArrivingCars(numberOfCars, PASS);    	
+        addArrivingCars(numberOfCars, PASS);
+        numberOfCars=getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
+        addArrivingCars(numberOfCars, SUBC);
     }
 
     private void carsEntering(CarQueue queue){
@@ -217,12 +233,19 @@ public class Simulator extends AbstractModel {
             	entranceCarQueue.addCar(new AdHocCar());
             }
             break;
+
     	case PASS:
             for (int i = 0; i < numberOfCars; i++) {
             	entrancePassQueue.addCar(new ParkingPassCar());
             }
-            break;	            
-    	}
+            break;
+
+        case SUBC:
+        for (int i = 0; i < numberOfCars; i++) {
+            entrancePassQueue.addCar(new Subscriber());
+        }
+        break;
+    }
     }
     
     private void carLeavesSpot(Car car){
