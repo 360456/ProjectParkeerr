@@ -26,7 +26,7 @@ public class Simulator extends AbstractModel {
     int weekDayPassArrivals= 50; // average number of arriving cars per hour
     int weekendPassArrivals = 5; // average number of arriving cars per hour
 
-    int enterSpeed = 3; // number of cars that can enter per minute
+    int enterSpeed = 1; // number of cars that can enter per minute
     int paymentSpeed = 7; // number of cars that can pay per minute
     int exitSpeed = 5; // number of cars that can leave per minute
 
@@ -48,8 +48,8 @@ public class Simulator extends AbstractModel {
 
                   @Override
                   public void run() {
-                       for (int i = 0; i < 10000; i++) {
-                           tick();
+                       for ( int i = 0; i < 2; i++) {
+                               tick();
                        }
                    }
             });
@@ -57,13 +57,21 @@ public class Simulator extends AbstractModel {
         }
     }
 
+
+
+
+
+
+
+
     public void runTien() {
         if(thread==null){
             thread =new Thread (new Runnable() {
 
+
                 @Override
                 public void run() {
-                    for (int i = 0; i <= 10; i++) {
+                    for (int i = 0; i < 10; i++) {
                         tick();
                     }
                 }
@@ -154,7 +162,7 @@ public class Simulator extends AbstractModel {
     }
 
     
-    private void carsArriving(){
+    public void carsArriving(){
     	int numberOfCars=getNumberOfCars(weekDayArrivals, weekendArrivals);
         addArrivingCars(numberOfCars, AD_HOC);    	
     	numberOfCars=getNumberOfCars(weekDayPassArrivals, weekendPassArrivals);
